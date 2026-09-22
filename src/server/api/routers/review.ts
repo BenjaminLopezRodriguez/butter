@@ -13,6 +13,24 @@ export const reviewRouter = createTRPCRouter({
     });
   }),
 
+  byId: protectedProcedure.input(z.object({ id: z.string().length(36) })).query(async ({ ctx, input }) => {
+    const review = await ctx.db.query.reviews.findFirst({
+      where: eq(reviews.id, input.id),
+      with: {
+        findings: {
+          orderBy: (finding, { asc }) => [asc(finding.timestampMs)],
+          with: { evidence: true },
+        },
+      },
+    });
+
+    // A review belongs to a workspace, but its author is always a member who
+    // may open it. Membership-aware access can replace this author check when
+    // the workspace picker ships.
+    if (!review || review.createdById !== ctx.session.user.id) return null;
+    return review;
+  }),
+
   create: protectedProcedure
     .input(
       z.object({
