@@ -1,6 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: var(--font-sans-plex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-plex), ui-monospace, "SF Mono", monospace;
+
+  /* Cold engineering ink. Blue-leaning so it reads as tooling, not "dark mode". */
+  --color-ink: #0e1219;
+  --color-surface: #151b25;
+  --color-raised: #1b2331;
+  --color-line: #232d3d;
+  --color-fg: #e3e8f0;
+  --color-muted: #8b95a8;
+  --color-faint: #78839a;
+
+  /* Diff vernacular. These encode finding type and are used for nothing else. */
+  --color-issue: #e5534b;
+  --color-suggestion: #3fb950;
+  --color-question: #d29922;
+
+  /* The one warm thing on the page. */
+  --color-butter: #f2cd6b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-butter);
+  outline-offset: 2px;
 }

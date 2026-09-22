@@ -1,55 +1,72 @@
 import Link from "next/link";
 
+import { Landing } from "~/app/_components/landing";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
   const session = await auth();
-  const reviews = session?.user ? await api.review.list() : [];
+
+  if (!session?.user) {
+    return (
+      <HydrateClient>
+        <main className="min-h-screen bg-ink">
+          <Landing />
+        </main>
+      </HydrateClient>
+    );
+  }
+
+  const reviews = await api.review.list();
 
   return (
     <HydrateClient>
-      <main className="min-h-screen bg-neutral-950 text-neutral-100">
-        <div className="mx-auto max-w-3xl px-6 py-16">
-          <header className="mb-12 flex items-baseline justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold tracking-tight">Butter</h1>
-              <p className="mt-1 text-sm text-neutral-400">
-                Reviews your product like your team reviews code.
-              </p>
+      <main className="min-h-screen bg-ink">
+        <div className="mx-auto max-w-4xl px-6">
+          <nav className="flex items-center justify-between border-b border-line py-6">
+            <span className="font-mono text-[15px] font-medium text-butter">butter</span>
+            <div className="flex items-center gap-4">
+              <span className="text-[13px] text-faint">{session.user.name}</span>
+              <Link
+                href="/api/auth/signout"
+                className="border border-line px-3 py-1.5 text-[13px] text-muted transition-colors hover:border-faint hover:text-fg"
+              >
+                Sign out
+              </Link>
             </div>
-            <Link
-              href={session ? "/api/auth/signout" : "/api/auth/signin"}
-              className="rounded-md border border-neutral-800 px-3 py-1.5 text-sm text-neutral-300 transition hover:border-neutral-600 hover:text-white"
-            >
-              {session ? "Sign out" : "Sign in with GitHub"}
-            </Link>
-          </header>
+          </nav>
 
-          {!session?.user ? (
-            <p className="text-sm text-neutral-500">
-              Sign in to record a demo and get timestamped findings.
-            </p>
-          ) : reviews.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-neutral-800 p-10 text-center">
-              <p className="text-sm text-neutral-400">No reviews yet.</p>
-              <p className="mt-1 text-xs text-neutral-600">
-                Record a demo, narrate what you are unsure about, and Butter files findings against it.
+          <div className="flex items-baseline justify-between py-8">
+            <h1 className="text-[20px] font-medium text-fg">Reviews</h1>
+            <Link
+              href="/reviews/new"
+              className="bg-butter px-3 py-1.5 text-[13px] font-medium text-ink transition-opacity hover:opacity-90"
+            >
+              New review
+            </Link>
+          </div>
+
+          {reviews.length === 0 ? (
+            <div className="border border-dashed border-line px-6 py-16 text-center">
+              <p className="text-[14px] text-muted">No reviews yet.</p>
+              <p className="mx-auto mt-2 max-w-[48ch] text-[13px] leading-relaxed text-faint">
+                Record a demo of your build and narrate what you are unsure about. Findings
+                come back on the timeline, ready to accept or dismiss.
               </p>
             </div>
           ) : (
-            <ul className="divide-y divide-neutral-900 border-y border-neutral-900">
+            <ul className="divide-y divide-line border-y border-line">
               {reviews.map((review) => (
                 <li key={review.id} className="flex items-center justify-between py-4">
                   <div>
-                    <p className="text-sm font-medium">{review.title}</p>
-                    <p className="mt-0.5 text-xs text-neutral-500">
+                    <p className="text-[14px] font-medium text-fg">{review.title}</p>
+                    <p className="mt-1 font-mono text-[12px] text-faint">
                       {review.gitBranch ?? "no branch"} · {review.status}
                     </p>
                   </div>
                   <Link
                     href={`/reviews/${review.id}`}
-                    className="text-xs text-neutral-400 hover:text-white"
+                    className="text-[13px] text-muted transition-colors hover:text-fg"
                   >
                     Open
                   </Link>
