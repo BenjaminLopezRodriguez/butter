@@ -3,6 +3,7 @@ import "~/styles/globals.css";
 import { type Metadata } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 
+import { ThemeProvider } from "~/app/_components/theme";
 import { TRPCReactProvider } from "~/trpc/react";
 
 export const metadata: Metadata = {
@@ -27,10 +28,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${sans.variable} ${mono.variable} ${serif.variable}`}
     >
       <body className="bg-ink text-fg antialiased">
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ThemeProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

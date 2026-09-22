@@ -1,44 +1,98 @@
 @import "tailwindcss";
 
-@theme {
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* Tokens resolve through CSS variables so a theme swap is one attribute. */
+@theme inline {
   --font-sans: var(--font-sans-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-geist), ui-monospace, "SF Mono", monospace;
   --font-serif: var(--font-serif-display), ui-serif, Georgia, serif;
 
-  /* Warm dark — brown-black, not blue-black. Butter melting in a dark pan. */
-  --color-ink: #100d0a;
-  --color-surface: #191411;
-  --color-raised: #221c17;
-  --color-line: #2e251e;
-  --color-fg: #f6efe6;
-  --color-muted: #b5a798;
-  --color-faint: #8d7f72;
-
-  /* Warmed finding colours — still legible as diff language, no longer clinical. */
-  --color-issue: #ff7a6b;
-  --color-suggestion: #7cc98a;
-  --color-question: #f0b649;
-
-  --color-butter: #f7c96b;
-  --color-honey: #e8a93f;
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-issue: var(--issue);
+  --color-suggestion: var(--suggestion);
+  --color-question: var(--question);
+  --color-butter: var(--butter);
+  --color-honey: var(--honey);
+  --color-brand: var(--brand);
 }
 
-/* One warm pool of light behind the hero. Wide and soft-edged: a tighter
-   ellipse leaves a visible seam where it terminates, which reads as a
-   rendering artifact rather than as light. */
+/* Dark — warm brown-black, butter melting in a dark pan. */
+:root,
+[data-theme="dark"] {
+  --ink: #100d0a;
+  --surface: #191411;
+  --raised: #221c17;
+  --line: #2e251e;
+  --fg: #f6efe6;
+  --muted: #b5a798;
+  --faint: #8d7f72;
+  --issue: #ff7a6b;
+  --suggestion: #7cc98a;
+  --question: #f0b649;
+  --butter: #f7c96b;
+  --honey: #e8a93f;
+  /* Wordmark tone. Butter-yellow is 1.68:1 on cream, so light gets its own. */
+  --brand: #f7c96b;
+
+  --glow-a: rgb(247 201 107 / 0.13);
+  --glow-b: rgb(247 201 107 / 0.05);
+  --glow-c: rgb(232 169 63 / 0.07);
+  --frame-a: rgb(247 201 107 / 0.22);
+  --frame-b: rgb(247 201 107 / 0.05);
+  --frame-c: rgb(255 255 255 / 0.02);
+  --ring: rgb(255 255 255 / 0.04);
+  --shot-shadow: 0 40px 120px -20px rgb(0 0 0 / 0.9);
+}
+
+/* Light — warm cream and ink, not white and grey. */
+[data-theme="light"] {
+  --ink: #fbf7f0;
+  --surface: #f4ece0;
+  --raised: #efe5d6;
+  --line: #e0d3bf;
+  --fg: #1f1812;
+  --muted: #6a5b4c;
+  --faint: #7d6e5e;
+  --issue: #c6412f;
+  --suggestion: #3f7f4c;
+  --question: #8a5e10;
+  --butter: #f0b93f;
+  --honey: #b8801f;
+  --brand: #8a5e10;
+
+  --glow-a: rgb(240 185 63 / 0.22);
+  --glow-b: rgb(240 185 63 / 0.09);
+  --glow-c: rgb(184 128 31 / 0.08);
+  --frame-a: rgb(31 24 18 / 0.16);
+  --frame-b: rgb(31 24 18 / 0.06);
+  --frame-c: rgb(31 24 18 / 0.03);
+  --ring: rgb(31 24 18 / 0.07);
+  --shot-shadow: 0 30px 80px -24px rgb(61 43 20 / 0.35);
+}
+
 .hero-glow {
   background:
-    radial-gradient(ellipse 120% 70% at 50% -10%, rgb(247 201 107 / 0.13) 0%, rgb(247 201 107 / 0.05) 38%, transparent 76%),
-    radial-gradient(ellipse 70% 50% at 78% 2%, rgb(232 169 63 / 0.07) 0%, transparent 70%);
+    radial-gradient(ellipse 120% 70% at 50% -10%, var(--glow-a) 0%, var(--glow-b) 38%, transparent 76%),
+    radial-gradient(ellipse 70% 50% at 78% 2%, var(--glow-c) 0%, transparent 70%);
 }
 
 .soft-frame {
-  background: linear-gradient(
-    to bottom,
-    rgb(247 201 107 / 0.22),
-    rgb(247 201 107 / 0.05) 30%,
-    rgb(255 255 255 / 0.02) 100%
-  );
+  background: linear-gradient(to bottom, var(--frame-a), var(--frame-b) 30%, var(--frame-c) 100%);
+}
+
+.shot-shadow {
+  box-shadow: var(--shot-shadow);
+}
+
+.soft-ring {
+  box-shadow: 0 0 0 1px var(--ring);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -52,6 +106,6 @@
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-butter);
+  outline: 2px solid var(--color-honey);
   outline-offset: 3px;
 }

@@ -13,12 +13,13 @@ import Link from "next/link";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
+import { ThemeToggle } from "~/app/_components/theme";
 
 const SIGNIN = "/api/auth/signin";
 
 function Wordmark() {
   return (
-    <span className="font-mono text-[15px] font-medium tracking-tight text-butter">
+    <span className="font-mono text-[15px] font-medium tracking-tight text-brand">
       butter
     </span>
   );
@@ -30,12 +31,7 @@ function Nav() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
         <Wordmark />
         <nav className="flex items-center gap-6">
-          <a
-            href="https://github.com/BenjaminLopezRodriguez/butter"
-            className="hidden text-[13px] text-muted transition-colors hover:text-fg sm:block"
-          >
-            Source
-          </a>
+          <ThemeToggle />
           <Button asChild size="sm" className="h-8 rounded-full bg-butter px-3 text-[13px] font-medium text-ink hover:bg-butter/90">
             <Link href={SIGNIN}>Start a review</Link>
           </Button>
@@ -85,7 +81,7 @@ function Hero() {
 
         {/* The product, not a picture of an idea of the product. */}
         <div className="relative mx-auto mt-16 max-w-5xl">
-          <div className="soft-frame rounded-3xl p-[1.5px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.9)]">
+          <div className="soft-frame rounded-3xl p-[1.5px] shot-shadow">
             <div className="overflow-hidden rounded-[22px] bg-surface">
               <Image
                 src="/review-screen.png"
@@ -105,7 +101,7 @@ function Hero() {
 }
 
 function Bento() {
-  const cell = "rounded-2xl bg-surface/80 p-7 ring-1 ring-white/[0.04] shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset]";
+  const cell = "rounded-2xl bg-surface/80 p-7 soft-ring";
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
